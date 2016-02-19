@@ -464,3 +464,8 @@ footer {
   line-height: 3.125rem;
   text-align: center;
 }
+
+/* Todo index */
+.index {
+  overflow: auto;
+}
