@@ -1,0 +1,30 @@
+{
+  "name": "gulp demo",
+  "description": "a gulp demo",
+  "version": "1.0.0",
+  "author": "llcowry <llcowry@126.com>",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "start": "gulp default"
+  },
+  "devDependencies": {
+    "del": "^1.2.1",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-cache": "^0.2.10",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-jshint": "^1.12.0",
+    "gulp-minify-css": "^1.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^1.0.5",
+    "gulp-uglify": "^1.2.0",
+    "gulp-load-plugins": "^0.7.0"
+  }
+}
