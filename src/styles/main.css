@@ -461,6 +461,6 @@ footer {
   overflow: hidden;
 }
 .main p {
-  line-height: 3.125;
+  line-height: 3.125rem;
   text-align: center;
 }

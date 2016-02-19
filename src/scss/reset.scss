@@ -15,7 +15,7 @@ $font: "Microsoft Yahei", "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
 $fontsize: 16px !default;
 
 @function px2em($px) {  
-  @return 1 / $fontsize * $px;  
+  @return 1 / $fontsize * $px + em;  
 }
 
 @function px2rem($px) {
