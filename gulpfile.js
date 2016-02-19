@@ -8,7 +8,7 @@ var gpath = {
   scripts: "src/scripts/",
   scss: "src/scss/",
   images: "src/images/",
-  build: "build"
+  dist: "dist"
 };
 
 // sass
@@ -35,50 +35,50 @@ gulp.task('jshint', function() {
     .pipe(plugins.connect.reload());
 });
 
-// build css
-gulp.task('build-css', function() {
+// dist css
+gulp.task('dist-css', function() {
   return gulp.src(gpath.styles + '**/*.css')
     // .pipe(plugins.minifyCss())
-    .pipe(gulp.dest(gpath.build + '/styles'));
+    .pipe(gulp.dest(gpath.dist + '/styles'));
 });
 
-// build js
-gulp.task('build-js', function() {
+// dist js
+gulp.task('dist-js', function() {
   return gulp.src(gpath.scripts + '**/*')
     // .pipe(plugins.concat('common.js'))
-    // .pipe(gulp.dest(gpath.build + '/scripts'))
+    // .pipe(gulp.dest(gpath.dist + '/scripts'))
     // .pipe(plugins.rename({
     //     suffix: '.min'
     // }))
     // .pipe(plugins.uglify())
-    .pipe(gulp.dest(gpath.build + '/scripts'));
+    .pipe(gulp.dest(gpath.dist + '/scripts'));
 });
 
-// build img
-gulp.task('build-img', function() {
+// dist img
+gulp.task('dist-img', function() {
   return gulp.src([gpath.images + '**/*', '!' + gpath.src + '**/*.psd'])
     .pipe(plugins.cache(plugins.imagemin({
       optimizationLevel: 3,
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest(gpath.build + '/images'));
+    .pipe(gulp.dest(gpath.dist + '/images'));
 });
 
-// build html
-gulp.task('build-html', function() {
+// dist html
+gulp.task('dist-html', function() {
   return gulp.src(gpath.src + '*.htm*')
-    .pipe(gulp.dest(gpath.build));
+    .pipe(gulp.dest(gpath.dist));
 });
 
 // clean
 gulp.task('clean', function(cb) {
-  del(['build/styles', 'build/scripts', 'build/images', 'build/*.htm*'], cb);
+  del(['dist/styles', 'dist/scripts', 'dist/images', 'dist/*.htm*'], cb);
 });
 
-// build
-gulp.task('build', ['clean'], function() {
-  gulp.start('build-css', 'build-js', 'build-img', 'build-html');
+// dist
+gulp.task('dist', ['clean'], function() {
+  gulp.start('dist-css', 'dist-js', 'dist-img', 'dist-html');
 });
 
 // connect svr
