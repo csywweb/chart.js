@@ -13,12 +13,19 @@ var gpath = {
 
 // sass
 gulp.task('sass', function() {
-  return plugins.rubySass(gpath.scss + 'main.scss', {
-      style: 'expanded'
-    })
-    .on('error', function(err) {
-      console.error('Err: ', err.message);
-    })
+  // cancel ruby sass
+  // return plugins.rubySass(gpath.scss + 'main.scss', {
+  //     style: 'expanded'
+  //   })
+  //   .on('error', function(err) {
+  //     console.error('Err: ', err.message);
+  //   })
+  return gulp.src(gpath.scss + 'main.scss')
+    // .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.sass({
+      outputStyle: 'expanded'
+    }).on('error', plugins.sass.logError))
+    // .pipe(plugins.sourcemaps.write())
     .pipe(plugins.autoprefixer({
       browsers: ['last 2 versions']
     }))
@@ -73,7 +80,7 @@ gulp.task('dist-html', function() {
 
 // clean
 gulp.task('clean', function(cb) {
-  del(['dist/styles', 'dist/scripts', 'dist/images', 'dist/*.htm*'], cb);
+  del([gpath.dist + '/styles', gpath.dist + '/scripts', gpath.dist + '/images', gpath.dist + '/*.htm*'], cb);
 });
 
 // dist

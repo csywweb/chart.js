@@ -36,6 +36,8 @@ footer {
   bottom: 0;
   width: 100%;
   height: px2rem(44px);
+  line-height: px2rem(44px);
+  text-align: center;
   background-color: #fff;
   border-top: px2rem(1px) solid $bdcolor;
 }
@@ -45,11 +47,14 @@ footer {
   position: relative;
   left: 0;
   top: px2rem(44px);
+  padding: px2rem(20px);
   height: 100%;
   overflow: hidden;
+  h1 {
+    font-size: px2rem(30px);
+  }
   p {
     line-height: px2rem(50px);
-    text-align: center;
   }
 }
 
