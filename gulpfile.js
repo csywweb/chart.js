@@ -1,5 +1,6 @@
 ﻿var gulp = require('gulp'),
   plugins = require('gulp-load-plugins')(),
+  stylish = require('jshint-stylish'),
   del = require('del');
 
 var gpath = {
@@ -38,7 +39,7 @@ gulp.task('sass', function() {
 gulp.task('jshint', function() {
   return gulp.src([gpath.scripts + '**/*.js', '!' + gpath.scripts + '**/*.min.js'])
     .pipe(plugins.jshint())
-    .pipe(plugins.jshint.reporter('default'))
+    .pipe(plugins.jshint.reporter('jshint-stylish'))
     .pipe(plugins.connect.reload());
 });
 
@@ -75,6 +76,11 @@ gulp.task('dist-img', function() {
 // dist html
 gulp.task('dist-html', function() {
   return gulp.src(gpath.src + '*.htm*')
+    .pipe(plugins.htmlmin({
+      collapseWhitespace: false,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true
+    }))
     .pipe(gulp.dest(gpath.dist));
 });
 
