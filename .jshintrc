@@ -13,18 +13,17 @@
     "noempty": true, //禁止出现空的代码块
     "nonew": false, //禁止使用构造器
     "plusplus": false,
-    "quotmark": "single", //为 true 时，禁止单引号和双引号混用
+    "quotmark": "single", //为true时，禁止单引号和双引号混用
     "regexp": false,
     "undef": true, //变量未定义
     "unused": false, //变量未使用
     "strict": false, //强制使用ES5的严格模式
     "trailing": true, //禁止行尾空格
     "maxparams": 20, //函数可以接受的最大参数数量
-    "maxdepth": 6, //代码块中可以嵌入'{}'的最大深度
+    "maxdepth": 6, //代码块中可以嵌入大括号的最大深度
     "maxlen": 1000, //一行中最大字符数
-
-    //控制“缺少分号”的警告
-    "asi": false,
+    
+    "asi": false, //控制“缺少分号”的警告
     "boss": false,
 
     "debug": false, //允许debugger语句
@@ -50,7 +49,6 @@
     "supernew": false,
     "validthis": true, //允许严格模式下在非构造函数中使用this
 
-    //预定义全局变量
     "browser": true,
     "couch": false,
     "devel": false,
