@@ -12,7 +12,7 @@ $ git clone https://github.com/llcowry/gulp-demo.git
 ### 安装依赖模块
 
 ``` bash
-$ npm install -g gulp gulp
+$ npm install -g gulp
 $ cd gulp-demo && npm install
 ```
 
