@@ -1,14 +1,15 @@
 {
   "name": "gulp-demo",
-  "description": "a gulp demo",
-  "version": "1.0.0",
+  "description": "Frontend engineering solution based on gulp.",
+  "version": "0.1.0",
   "author": "llcowry <llcowry@126.com>",
   "license": "MIT",
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "start": "gulp default"
+    "start": "gulp",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
