@@ -1,7 +1,6 @@
 ﻿var gulp = require('gulp'),
   plugins = require('gulp-load-plugins')(),
-  stylish = require('jshint-stylish'),
-  del = require('del');
+  stylish = require('jshint-stylish');
 
 var gpath = {
   src: "src/",
@@ -78,6 +77,7 @@ gulp.task('dist-html', function() {
   return gulp.src(gpath.src + '*.htm*')
     .pipe(plugins.htmlmin({
       collapseWhitespace: false,
+      removeComments: false,
       removeScriptTypeAttributes: true,
       removeStyleLinkTypeAttributes: true
     }))
@@ -85,12 +85,13 @@ gulp.task('dist-html', function() {
 });
 
 // clean
-gulp.task('clean', function(cb) {
-  del([gpath.dist + '/styles', gpath.dist + '/scripts', gpath.dist + '/images', gpath.dist + '/*.htm*'], cb);
+gulp.task('clean', function() {
+  return gulp.src(gpath.dist, { read: true })
+    .pipe(plugins.rimraf());
 });
 
 // dist
-gulp.task('dist', ['clean'], function() {
+gulp.task('build', ['clean'], function() {
   gulp.start('dist-css', 'dist-js', 'dist-img', 'dist-html');
 });
 
