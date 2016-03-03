@@ -4,7 +4,7 @@
     "curly": true, //循环或者条件语句必须使用花括号包围
     "es3": true, //兼容低级浏览器 IE 6/7/8/9
     "eqeqeq": true, //强制使用三等号
-    "indent": 4, //代码缩进
+    "indent": 2, //代码缩进
     "forin": false, //在forin循环中使用hasOwnProperty()来过滤原型链中的属性
     "immed": false, //匿名函数调用格式限定
     "latedef": "nofunc", //禁止定义之前使用变量，忽略函数声明
