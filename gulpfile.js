@@ -14,23 +14,19 @@ var gvar = {
 
 // sass
 gulp.task('sass', function() {
-  // cancel ruby sass
-  // return plugins.rubySass(gvar.scss + 'main.scss', {
-  //     style: 'expanded'
-  //   })
-  //   .on('error', function(err) {
-  //     console.error('Err: ', err.message);
-  //   })
   return gulp.src(gvar.scss + 'main.scss')
     // .pipe(plugins.sourcemaps.init())
     .pipe(plugins.sass({
-      outputStyle: 'expanded'
+      outputStyle: 'nested'
     }).on('error', plugins.sass.logError))
     // .pipe(plugins.sourcemaps.write())
     .pipe(plugins.autoprefixer({
-      browsers: ['last 2 versions']
+      browsers: [
+        'last 2 versions',
+        'ios 6',
+        'android 4'
+      ]
     }))
-    // .pipe(plugins.minifyCss())
     .pipe(gulp.dest(gvar.styles))
     .pipe(plugins.connect.reload());
 });
@@ -46,7 +42,7 @@ gulp.task('jshint', function() {
 // build css
 gulp.task('build-css', function() {
   return gulp.src(gvar.styles + '**/*.css')
-    // .pipe(plugins.minifyCss())
+    .pipe(plugins.cleanCss())
     .pipe(gulp.dest(gvar.dist + '/styles'));
 });
 
