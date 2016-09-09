@@ -1,6 +1,6 @@
 # gulp-demo
 
-基于 gulp 搭建纯静态页面型前端工程解决方案实例
+Frontend engineering solution based on gulp
 
 
 ### Clone
