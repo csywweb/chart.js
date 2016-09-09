@@ -16,7 +16,7 @@ $ npm install -g gulp
 $ cd gulp-demo && npm install
 ```
 
-### Dev
+### Start
 
 ``` bash
 $ npm run start
