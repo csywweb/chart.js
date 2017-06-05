@@ -1,4 +1,18 @@
+/*
+ *  lineChart.js
+ *  动态生成折线图
+ *  author: csywweb
+ *  link : https://github.com/csywweb/lineChart.js 
+ *
+ */
+
 ;(function(window, document, undefined){
+
+  /*
+   *  引用自 hidpi-canvas-polyfill
+   *  https://github.com/jondavidjohn/hidpi-canvas-polyfill
+   *  解决高清屏幕下canvas的模糊问题
+   */
   var lastTime = 0;
   var vendors = ['webkit', 'moz'];
   for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -23,6 +37,12 @@
           clearTimeout(id);
       };
   }
+
+  /*
+   * 工具类
+   * 
+   *
+   */
   utils = {
     getNum : function(string){
       var value = string.replace(/[^0-9]/ig,""); 
@@ -58,7 +78,7 @@
         return (window.devicePixelRatio || 1) / backingStore;
     }
   }
-  var Chart = {
+  var LineChart = {
     init : function(){
       return new CreateChart(arguments[0])
     }
@@ -81,6 +101,19 @@
     this.width_num  = utils.getNum(this.width); 
     this.height_num = utils.getNum(this.height);
 
+    //生成canvas对象
+    var canvas  = document.createElement('canvas');
+    this.canvas = canvas;
+    this.ctx    = canvas.getContext("2d");
+
+    //设备缩放比
+    var radio           = utils.getPixelRatio(this.ctx);
+    this.radio          = radio;
+    //定义样式
+    canvas.width        = this.width_num * radio;
+    canvas.height       = this.height_num * radio;
+    canvas.style.width  = this.width;
+    canvas.style.height = this.height;
   }
   /*
   *   options
@@ -89,35 +122,38 @@
   *
   */
   CreateChart.prototype.setOption = function(options){
-    this.options = options;
-
-   
-    var canvas = document.createElement('canvas');
-   
-    this.target.appendChild(canvas);
-    this.ctx = canvas.getContext("2d");
-
-    var radio  = utils.getPixelRatio(this.ctx);
-    this.radio = radio;
+    this.options      = options;
+    this.xAxis_data   = options.xAxis.data;
+    this.yAxis_data   = options.yAxis.data;
+    this.yLength      = this.yAxis_data.length;
+    this.xLength      = this.xAxis_data.length;     //x轴数据的长度
+    var points        = this.xLength + 1;
+    this.xAxisUnit    = parseInt(this.width_num / points);  //y轴单位刻度
     
-    canvas.width        = this.width_num * radio;
-    canvas.height       = this.height_num * radio;
-    canvas.style.width  = this.width;
-    canvas.style.height = this.height;
+    if(this.xLength > this.yLength){
+      this.xLength = this.yLength;
+    } else if(this.xLength < this.yLength){
+      this.yLength = this.xLength;
+    }
 
-    //极点坐标
+
+
+    var canvas = this.canvas;
+    this.target.appendChild(canvas);
+    
+    //坐标原点
     this.startX = 10;
     this.startY = this.height_num*this.radio - 30;
 
-    this.setXAxis()
+    this.setXAxis();      //设定x轴的下标
+    this.lineXAxis();     //x轴对应下标的延长线
+    this.drawXAxis();     //绘制x轴
+    this.drawYAxix();     //绘制y轴
+    this.drawLine();      //绘制折线
   }
   CreateChart.prototype.setXAxis = function(){
-    var xAxis_data = this.options.xAxis.data;
-
-    var length = xAxis_data.length;
-    var points = length + 1;
-    var unit   = parseInt(this.width_num / points);
-    this.unit  = unit;
+    var length = this.xLength;
+    var unit   = this.xAxisUnit;
     
     this.ctx.fillStyle    = "#666";
     this.ctx.font         = 12*this.radio + "px" +" PingFang SC";
@@ -126,20 +162,12 @@
       var x = unit*(i+1)*this.radio;
       var y = this.height_num*this.radio - 5;
      
-      this.ctx.fillText(xAxis_data[i], x, y);
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, this.startY);
-      this.ctx.lineTo(x, 0);
-      this.ctx.lineJoin = 'round';
-      this.ctx.strokeStyle="#DDD";
-      this.ctx.stroke();
+      this.ctx.fillText(this.xAxis_data[i], x, y);
+     
     }
-
-    this.drawXAxis();
-    this.drawYAxix();
   }
   CreateChart.prototype.drawXAxis = function(){
-    var ctx = this.ctx;
+    var ctx    = this.ctx;
     var startX = this.startX;
     var startY = this.startY;
     var endX   = this.width_num*this.radio;
@@ -149,8 +177,8 @@
     ctx.lineTo(endX - 10, startY - 6);
     ctx.moveTo(endX, startY);
     ctx.lineTo(endX - 10, startY + 6);
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle="#333";
+    ctx.lineJoin    = 'round';
+    ctx.strokeStyle = "#333";
     ctx.stroke();
   }
 
@@ -163,11 +191,39 @@
     ctx.moveTo(this.startX, 0);
     ctx.lineTo(this.startX - 6, 10);
     ctx.lineJoin = 'round';
-    ctx.strokeStyle="#333";
+    ctx.strokeStyle = "#333";
     ctx.stroke();
   }
 
+  CreateChart.prototype.lineXAxis = function(){
+    var xAxis_data = this.options.xAxis.data;
+    var length     = this.xAxis_data.length;
+    var unit       = this.xAxisUnit;
+
+    for(var i = 0; i < length; i++){
+      var x = unit*(i+1)*this.radio;
+      var y = this.height_num*this.radio - 5;
+     
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, this.startY);
+      this.ctx.lineTo(x, 0);
+      this.ctx.lineJoin    = 'round';
+      this.ctx.strokeStyle = "#DDD";
+      this.ctx.stroke();
+    }
+  }
+  CreateChart.prototype.drawLine = function(){
+    var ydata = this.yAxis_data;
+    
+
+
+  }
   
 
-  window.Chart = Chart;
+  window.LineChart = LineChart;
 })(window, document, undefined)
+
+
+
+
+

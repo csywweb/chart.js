@@ -49,10 +49,13 @@ var options = {
   xAxis : {
     data : data.date
   },
-  data : data.number
+  yAxis: {
+    data : data.number
+  }
+  
 }
-var lineChart = Chart.init("canvas");
-lineChart.setOption(options);
+var chart = LineChart.init("canvas");
+chart.setOption(options);
 // var canvas = document.getElementById("canvas");
 // var ctx = canvas.getContext("2d");
 
