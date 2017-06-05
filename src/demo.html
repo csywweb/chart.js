@@ -7,16 +7,55 @@
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/global.js"></script>
+  <style type="text/css">
+  *{
+    box-sizing: border-box;
+  }
+    #canvas{
+      margin-top:30px;
+      width:400px;
+      height:200px;
+      padding:20px;
+      border:1px solid #DDD;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    header
-    <span class="js-back"></span>
-  </header>
-  <div class="main">
-    <h1>title</h1>
-    <p>content</p>
-  </div>
-  <footer>footer</footer>
+  <div id="canvas"></div>
+<script type="text/javascript">
+var data = {
+  date : [1,2,3,4,5,6],
+  number : [10,12,40,20,66,30]
+}
+var map_month = {
+  '1' : 'Jan',
+  '2' : 'Feb',
+  '3' : 'Mar',
+  '4' : 'Apr',
+  '5' : 'May',
+  '6' : 'Jun',
+  '7' : 'July',
+  '8' : 'Aug',
+  '9' : 'Sep',
+  '10': 'Oct',
+  '11': 'Nov',
+  '12': 'Dec',
+}
+
+for(var i = 0; i < data.date.length; i++){
+  data.date[i] = map_month[data.date[i]];
+}
+var options = {
+  xAxis : {
+    data : data.date
+  },
+  data : data.number
+}
+var lineChart = Chart.init("canvas");
+lineChart.setOption(options);
+// var canvas = document.getElementById("canvas");
+// var ctx = canvas.getContext("2d");
+
+</script>
 </body>
 </html>
