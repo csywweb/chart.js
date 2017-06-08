@@ -95,7 +95,14 @@
             context.backingStorePixelRatio || 1;
     
         return (window.devicePixelRatio || 1) / backingStore;
-    }
+    },
+    getMaximin : function(arr,maximin) { 
+      if(maximin=="max") { 
+        return Math.max.apply(Math,arr); 
+      } else if(maximin=="min") { 
+        return Math.min.apply(Math, arr); 
+      } 
+    } 
   }
   var LineChart = {
     init : function(){
