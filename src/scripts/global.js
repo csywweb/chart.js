@@ -155,11 +155,11 @@
   *   options
   *   
   *
-  *
   */
   CreateChart.prototype.setOption = function(options){
     this.options  = utils.extend(this.config, options);
-    
+    this.sets     = [];    //所有坐标集合
+
     this.initAxis();
     if(this.xSize > this.yLength){
       this.xSize = this.yLength;
@@ -189,8 +189,8 @@
     this.yAxis_data   = this.options.yAxis.data;
     this.yLength      = this.yAxis_data.length;                         //y轴数据的个数
     this.xSize        = this.xAxis_data.length;                         //x轴数据的个数
-    this.xAxisUnit    = parseInt(this.x_length / (this.xSize - 1));  //x轴单位刻度
-    console.log(this)
+    this.xAxisUnit    = parseInt(this.x_length / (this.xSize - 1));     //x轴单位刻度
+   
   }
   CreateChart.prototype.setXAxis = function(){
     var length = this.xSize;
@@ -204,7 +204,10 @@
       var y = this.height_num*this.radio - 5;
      
       this.ctx.fillText(this.xAxis_data[i], x, y);
-     
+      
+      //每个点的X坐标存入数组
+      this.sets[i] = [];
+      this.sets[i][0] = x;
     }
   }
   CreateChart.prototype.lineXAxis = function(){
@@ -220,7 +223,7 @@
       this.ctx.moveTo(x, this.startY);
       this.ctx.lineTo(x, 0);
       this.ctx.lineJoin    = 'round';
-      this.ctx.strokeStyle = "#DDD";
+      this.ctx.strokeStyle = this.config.color.extendsLine;
       this.ctx.stroke();
     }
   }
@@ -236,7 +239,7 @@
     // ctx.moveTo(endX, startY);
     // ctx.lineTo(endX - 10, startY + 6);
     ctx.lineJoin    = 'round';
-    ctx.strokeStyle = "#333";
+    ctx.strokeStyle = this.config.color.Axis;
     ctx.stroke();
   }
 
@@ -249,15 +252,34 @@
     // ctx.moveTo(this.startX, 0);
     // ctx.lineTo(this.startX - 6, 10);
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = "#333";
+    ctx.strokeStyle = this.config.color.Axis;
     ctx.stroke();
   }
 
   
   CreateChart.prototype.drawLine = function(){
     var ydata = this.yAxis_data;
+    //找出y轴数据最大点。
+    var maxData = utils.getMaximin(ydata, 'max');
+    console.log(maxData);
+    //根据Y粥长度算出1个坐标单位代表的数值
+    var yUnit = maxData / this.startY;
 
+    //将每个点的y轴坐标存进数组
+    for(var i = 0; i < ydata.length; i++){
+       this.sets[i][1] = ydata[i]/yUnit;
+    }
+    
+    //画线
+     this.ctx.beginPath();
+     this.ctx.moveTo(this.sets[0][0], this.sets[0][1]);
 
+     for(var j = 1; j < this.sets.length; j++ ){
+        this.ctx.lineTo(this.sets[j][0], this.sets[j][1]);
+     }
+     this.ctx.lineJoin = 'round';
+     this.ctx.strokeStyle = this.config.color.line;
+     this.ctx.stroke();
 
   }
   
