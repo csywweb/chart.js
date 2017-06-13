@@ -39,6 +39,9 @@ gulp.task('jshint', function() {
     .pipe(plugins.connect.reload());
 });
 
+gulp.task('js', function(){
+  return gulp.src()
+})
 // build css
 gulp.task('build-css', function() {
   return gulp.src(gvar.styles + '**/*.css')

@@ -119,8 +119,10 @@
         line : "#FF0000",
         fontColor : "#333"
       },
+      animateType : "Linear",
       isX : true,
-      isY : true
+      isY : true,
+      isXExtendLine : true,
     }
 
     //生成canvas对象
@@ -172,8 +174,13 @@
 
     this.setXAxis();      //设定x轴的下标
     this.lineXAxis();     //x轴对应下标的延长线
-    this.drawXAxis();     //绘制x轴
-    this.drawYAxix();     //绘制y轴
+    if(this.options.isX){
+      this.drawXAxis();     //绘制x轴
+    }
+    if(this.options.isY){
+      this.drawYAxix();     //绘制y轴
+    }
+    
     this.drawLine();      //绘制折线
   }
   CreateChart.prototype.initAxis = function(){
@@ -272,14 +279,36 @@
     
     //画线
      this.ctx.beginPath();
-     this.ctx.moveTo(this.sets[0][0], this.sets[0][1]);
-
-     for(var j = 1; j < this.sets.length; j++ ){
-        this.ctx.lineTo(this.sets[j][0], this.sets[j][1]);
-     }
      this.ctx.lineJoin = 'round';
      this.ctx.strokeStyle = this.config.color.line;
-     this.ctx.stroke();
+     //this.ctx.moveTo(this.sets[0][0], this.sets[0][1]);
+    var start = 0, during = 500;
+     var that = this;
+    //  for(var j = 1; j < this.sets.length; j++ ){
+    //     run(this.sets[j-1][0], this.sets[j-1][1], this.sets[j][0], this.sets[j][1]);
+    //     //this.ctx.lineTo(this.sets[j][0], this.sets[j][1]);
+    //  }
+    run(this.sets[0][0], this.sets[0][1], this.sets[1][0], this.sets[1][1])
+     console.log(this.sets)
+     function run(startX, startY, endX, endY){
+       start++;
+       var x = Tween[that.options.animateType](start, startX, endX-startX, during)
+       var y = Tween[that.options.animateType](start, startY, endY-startY, during)
+       this.ctx.moveTo()
+       that.ctx.lineTo(x, y);
+       that.ctx.stroke();
+       console.log("x:", x);
+       console.log("y:", y);
+       
+       if(start < during){
+         requestAnimationFrame(run(x, endX, y, endY));
+       } else {
+         
+         start = 0;
+         during = 0;
+       }
+     }
+
 
   }
   
