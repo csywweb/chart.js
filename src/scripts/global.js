@@ -235,9 +235,6 @@
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, startY);
-    // ctx.lineTo(endX - 10, startY - 6);
-    // ctx.moveTo(endX, startY);
-    // ctx.lineTo(endX - 10, startY + 6);
     ctx.lineJoin    = 'round';
     ctx.strokeStyle = this.config.color.Axis;
     ctx.stroke();
@@ -248,9 +245,6 @@
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.startX, 0);
-    // ctx.lineTo(this.startX + 6, 10);
-    // ctx.moveTo(this.startX, 0);
-    // ctx.lineTo(this.startX - 6, 10);
     ctx.lineJoin = 'round';
     ctx.strokeStyle = this.config.color.Axis;
     ctx.stroke();
@@ -281,8 +275,21 @@
      this.ctx.strokeStyle = this.config.color.line;
      this.ctx.stroke();
 
+     this.intiEvent();
   }
   
+  CreateChart.prototype.intiEvent = function(){
+    var canvas = this.canvas;
+    console.log("xx")
+    canvas.onmousemove = function(event){
+      var event = event ? event : window.event;
+      var x = event.pageX - canvas.getBoundingClientRect().left;
+      var y = event.pageY - canvas.getBoundingClientRect().top;
+
+      console.log("x:", x);
+      console.log("y:", y);
+    }
+  }
 
   window.LineChart = LineChart;
 })(window, document, undefined)
