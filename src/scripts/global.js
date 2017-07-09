@@ -110,7 +110,10 @@
     }
   }
   function CreateChart(selector){
-    this.target = document.getElementById(selector);
+    this.selector              = selector;
+    this.target                = document.getElementById(selector);
+    this.target.style.position = "relative";
+    this.appendDom();
     // 默认配置项
     this.config = {
       color : {
@@ -125,11 +128,12 @@
 
     //生成canvas对象
     var canvas  = document.createElement('canvas');
+    canvas.setAttribute("style", "cursor:pointer"); 
     this.canvas = canvas;
     this.ctx    = canvas.getContext("2d");
     //设备缩放比
-    var radio           = utils.getPixelRatio(this.ctx);
-    this.radio          = radio;
+    var radio   = utils.getPixelRatio(this.ctx);
+    this.radio  = radio;
 
     var obj = this.target, style;
     if(window.getComputedStyle){
@@ -140,6 +144,10 @@
     //宽度高度， 带单位px
     this.width  = utils.getNum(style.width) - utils.getNum(style.paddingLeft) - utils.getNum(style.paddingRight) + "px";
     this.height = utils.getNum(style.height) - utils.getNum(style.paddingTop) - utils.getNum(style.paddingBottom) + "px";
+
+    this.paddingLeft = utils.getNum(style.paddingLeft);
+    this.paddingTop  = utils.getNum(style.paddingTop);
+  console.log(this.paddingLeft)
 
     //宽度高度， 不带px
     this.width_num  = utils.getNum(this.width); 
@@ -172,8 +180,12 @@
 
     this.setXAxis();      //设定x轴的下标
     this.lineXAxis();     //x轴对应下标的延长线
-    this.drawXAxis();     //绘制x轴
-    this.drawYAxix();     //绘制y轴
+    if(this.options.isX){
+      this.drawXAxis();     //绘制x轴
+    }
+    if(this.options.isY){
+       this.drawYAxix();     //绘制y轴
+    }
     this.drawLine();      //绘制折线
   }
   CreateChart.prototype.initAxis = function(){
@@ -207,7 +219,7 @@
       
       //每个点的X坐标存入数组
       this.sets[i] = [];
-      this.sets[i][0] = x;
+      this.sets[i][0] = parseInt(x);
     }
   }
   CreateChart.prototype.lineXAxis = function(){
@@ -255,13 +267,13 @@
     var ydata = this.yAxis_data;
     //找出y轴数据最大点。
     var maxData = utils.getMaximin(ydata, 'max');
-    console.log(maxData);
+    
     //根据Y粥长度算出1个坐标单位代表的数值
     var yUnit = maxData / this.startY;
 
     //将每个点的y轴坐标存进数组
     for(var i = 0; i < ydata.length; i++){
-       this.sets[i][1] = ydata[i]/yUnit;
+       this.sets[i][1] = parseInt(ydata[i]/yUnit);
     }
     
     //画线
@@ -272,23 +284,90 @@
         this.ctx.lineTo(this.sets[j][0], this.sets[j][1]);
      }
      this.ctx.lineJoin = 'round';
+     this.ctx.lineWidth = 3;
      this.ctx.strokeStyle = this.config.color.line;
      this.ctx.stroke();
 
-     this.intiEvent();
+     this.initEvent();
   }
   
-  CreateChart.prototype.intiEvent = function(){
+  CreateChart.prototype.initEvent = function(){
     var canvas = this.canvas;
-    console.log("xx")
+    var sets   = this.sets;     //所有坐标点的集合
+
+    var pop = document.getElementById(this.selector + "_pop");
+
+    var paddingLeft  = parseInt(this.paddingLeft);
+    var paddingTop   = parseInt(this.paddingTop);
+    console.log(paddingLeft)
     canvas.onmousemove = function(event){
       var event = event ? event : window.event;
       var x = event.pageX - canvas.getBoundingClientRect().left;
       var y = event.pageY - canvas.getBoundingClientRect().top;
 
-      console.log("x:", x);
-      console.log("y:", y);
+      for(var i = 0; i < sets.length; i++){
+        if(x < sets[i][0] + 8 && x > sets[i][0] - 8){
+          pop.style.left = parseInt(sets[i][0]) + paddingLeft -8  + "px";
+          pop.style.top  = parseInt(sets[i][1]) + paddingTop - 8 + "px";
+          pop.style.display = "block";
+          break;
+        } else {
+          pop.style.display = "none";
+        }
+      }
     }
+
+    canvas.onmouseout = function(event){
+      pop.style.display = "none";
+    }
+  }
+
+  //绘制DOM，以后会重构一下，临时写的
+  CreateChart.prototype.appendDom = function(){
+    console.log("xx")
+    var selector = this.selector;
+
+    var parent = document.createElement("div");
+    parent.style.position = "absolute";
+    parent.style.display  = "none";
+    parent.setAttribute("id", selector + "_pop");
+
+    var circle = document.createElement("div");
+    circle.setAttribute("style", "padding:2px;background-color: #FFF;width:16px;border:1px solid #DDD;border-bottom: 1px solid #FFF;position: relative;top:1px;");
+
+    var circle_ = document.createElement("div");
+    circle_.setAttribute("style", "width:10px;height:10px;border:1px solid #2ea967;border-radius: 50%;margin:0 auto;");
+
+    circle.appendChild(circle_);
+    parent.appendChild(circle);
+
+    var text_grid = document.createElement("div");
+    text_grid.setAttribute("style", "background-color: rgba(255,255,255, .8);border:1px solid #DDD;padding:4px;");
+
+    var p1    = document.createElement("p"),
+        p2    = document.createElement("p"),
+        span1 = document.createElement("span"),
+        span2 = document.createElement("span"),
+        text1 = document.createTextNode("5月新增客户"),
+        text2 = document.createTextNode("人");
+
+    p1.setAttribute("style", "font-size:12px;line-height: 16px;");
+    span1.setAttribute("id", selector + "_month");
+    p1.appendChild(span1);
+    p1.appendChild(text1);
+
+    p2.setAttribute("style", "font-size:14px;line-height: 18px;");
+    span2.setAttribute("style", "font-size:16px;");
+    span2.setAttribute("id", selector + "_num");
+    p2.appendChild(span2);
+    p2.appendChild(text2);
+
+    text_grid.appendChild(p1);
+    text_grid.appendChild(p2);
+
+    parent.appendChild(text_grid);
+
+    this.target.appendChild(parent);
   }
 
   window.LineChart = LineChart;
@@ -296,5 +375,7 @@
 
 
 
+
+ 
 
 

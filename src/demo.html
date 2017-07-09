@@ -21,7 +21,17 @@
   </style>
 </head>
 <body>
-  <div id="canvas"></div>
+  <div id="canvas">
+    <!-- <div style="position: absolute;">
+      <div style="padding:2px;background-color: #FFF;width:16px;border:1px solid #DDD;border-bottom: 1px solid #FFF;position: relative;top:1px;">
+        <div style="width:10px;height:10px;border:1px solid #2ea967;border-radius: 50%;margin:0 auto;"></div>
+      </div>
+      <div style="background-color: rgba(255,255,255, .8);border:1px solid #DDD;padding:4px;">
+        <p style="font-size:12px;line-height: 16px;"><span>5</span>月新增客户</p>
+        <p style="font-size:14px;line-height: 18px;"><span style="font-size:16px;">8</span>人</p>
+      </div>
+    </div> -->
+  </div>
 <script type="text/javascript">
 var data = {
   date : [1,2,3,4,5,6],
@@ -51,7 +61,9 @@ var options = {
   },
   yAxis: {
     data : data.number
-  }
+  },
+  isX : false,
+  isY : false,
   
 }
 var chart = LineChart.init("canvas");
